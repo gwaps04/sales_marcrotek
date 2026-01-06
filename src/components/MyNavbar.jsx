@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // We use Link instead of <a> for internal pages
+import { Link } from 'react-router-dom'; 
 
 const MyNavbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
+  // 1. Navbar Scroll Hide/Show Logic
   const controlNavbar = () => {
     if (typeof window !== 'undefined') {
       const currentScrollY = window.scrollY;
@@ -28,6 +29,15 @@ const MyNavbar = () => {
     }
   }, [lastScrollY]);
 
+  // 2. NEW: Function to force-close the mobile menu
+  const closeMenu = () => {
+    const menu = document.getElementById('navbarNav');
+    // If the menu is open (has 'show' class), remove it
+    if (menu && menu.classList.contains('show')) {
+      menu.classList.remove('show');
+    }
+  };
+
   return (
     <nav 
       className={`navbar navbar-expand-lg navbar-dark bg-gradient-red w-100 shadow-sm smart-navbar ${
@@ -36,8 +46,7 @@ const MyNavbar = () => {
     >
       <div className="container-fluid px-4">
         
-        {/* Link to Home using React Router Link */}
-        <Link className="navbar-brand fw-bold text-uppercase" to="/">
+        <Link className="navbar-brand fw-bold text-uppercase" to="/" onClick={closeMenu}>
           Macrotek Digital Solutions
         </Link>
 
@@ -52,30 +61,29 @@ const MyNavbar = () => {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav navbar-centered-absolute align-items-center gap-4">
+            
             <li className="nav-item">
-              <Link className="nav-link" to="/">Home</Link>
-            </li>
-            <li className="nav-item">
-              {/* Anchor links (#) only work well if you are ALREADY on the home page. 
-                  For a multi-page app, we might need to adjust this later. */}
-              <a className="nav-link" href="/#services">Services</a>
+              <Link className="nav-link" to="/" onClick={closeMenu}>Home</Link>
             </li>
             
-            {/* NEW LINK: The Lead Magnet */}
             <li className="nav-item">
-              <Link className="nav-link text-warning fw-bold" to="/free-audit">
-                Free Growth Audit
-              </Link>
+              <a className="nav-link" href="/#services" onClick={closeMenu}>Services</a>
             </li>
+            
+            {/* HIDDEN: "Free Growth Audit" is removed from here.
+               It is now accessible ONLY via the Email Link. 
+            */}
 
             <li className="nav-item">
-              <a className="nav-link" href="/#testimonials">Testimonials</a>
+              <a className="nav-link" href="/#testimonials" onClick={closeMenu}>Testimonials</a>
             </li>
+            
             <li className="nav-item">
-              <a className="btn btn-light text-danger fw-bold rounded-pill px-4 shadow-sm" href="/#book">
+              <a className="btn btn-light text-danger fw-bold rounded-pill px-4 shadow-sm" href="/#book" onClick={closeMenu}>
                 Book Now
               </a>
             </li>
+
           </ul>
         </div>
       </div>
