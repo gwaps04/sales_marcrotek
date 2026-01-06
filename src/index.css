@@ -1,0 +1,206 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+/* Custom Gradient Red */
+.bg-gradient-red {
+  background: linear-gradient(90deg, #8B0000 0%, #DC143C 100%);
+  /* This is a professional Dark Red to Crimson fade */
+}
+
+/* Ensure font is readable and professional */
+.navbar-brand, .nav-link {
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.hero-section {
+  /* This tells CSS to look in the public folder for the image */
+  background-image: url('/imgs/pn1.png'); 
+  
+  /* Standard settings to make images look good on all screens */
+  background-size: cover;
+  background-position: center 40%;
+  background-repeat: no-repeat;
+  
+  /* We set a minimum height so it feels like a big banner (100% of viewport height is common, but 85vh is safer for mobile bars) */
+  min-height: 85vh;
+  
+  /* Flexbox to center the content vertically */
+  display: flex;
+  align-items: center;
+  
+  /* RELATIVE positioning so we can put an overlay on top if needed */
+  position: relative;
+}
+
+/* This creates a black tint over the image so text is readable */
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.7); /* 70% opacity black */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ensure content sits ON TOP of the overlay */
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+@media (min-width: 992px) {
+  .navbar-centered-absolute {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
+
+/* --- Authority Bar Interactions --- */
+
+/* Default state is grey (handled by bootstrap text-secondary), 
+   but on hover we want them to pop slightly */
+.hover-color-brand:hover {
+  transform: translateY(-5px); /* Moves up slightly */
+  color: #111; /* Turns dark black/brand color */
+  cursor: pointer;
+}
+
+/* 1. Compensate for the Fixed Navbar 
+   (Since the nav is now floating, we need to push the site down roughly 80px) */
+body {
+  padding-top: 0; 
+  margin: 0;
+}
+
+/* 2. The Sliding Logic */
+.smart-navbar {
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease;
+  position: fixed; /* Pins it to the viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030; /* Bootstrap standard z-index for navs */
+}
+
+/* When scrolling down, we translate (move) it UP out of view */
+.navbar-hidden {
+  transform: translateY(-100%);
+}
+
+/* When scrolling up, it sits at 0 (visible) */
+.navbar-visible {
+  transform: translateY(0);
+}
+
+/* A professional Deep Blue/Purple/Black gradient.
+   It contrasts perfectly with your Red Brand color. */
+.bg-gradient-midnight {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+}
+
+/* Service Card Styling */
+.service-card {
+  background: white;
+  border: none;
+  border-radius: 15px; /* Soft, modern corners */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%; /* Ensures all cards are equal height */
+
+}
+
+/* Hover Effect: Lifts up and glows slightly */
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Icon Container styling */
+.icon-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
+  font-size: 2.5rem;
+}
+
+/* Professional "Gunmetal to Blue" Gradient */
+.bg-gradient-booking {
+  background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+  color: white;
+}
+
+/* Apply the requested font */
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* The Calendar Container (White Box) */
+.booking-container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Deep shadow for pop */
+  overflow: hidden;
+  min-height: 600px; /* Tall enough for a calendar */
+}
+
+/* 1. Define the transition for the text */
+.hero-text-group {
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+  opacity: 1; /* Normally visible */
+  transform: translateY(0);
+}
+
+/* 2. The Trigger Logic */
+/* When the user hovers anywhere over the 'hero-content' container... */
+.hero-content:hover .hero-text-group {
+  opacity: 0; /* Make the text invisible */
+  transform: translateY(-20px); /* Optional: floats it up slightly as it vanishes for a ghostly effect */
+}
+
+/* 3. Ensure the Button stays fully visible and interactive */
+.hero-content:hover .btn {
+  opacity: 1;
+  z-index: 10; /* Ensures it stays clickable */
+}
+
+/* 1. Blinking Animation */
+@keyframes soft-blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; } /* Don't go to 0, it's too hard on the eyes */
+  100% { opacity: 1; }
+}
+
+.blink-text {
+  animation: soft-blink 1.5s infinite ease-in-out;
+}
+
+/* 2. Attractive Gradient Background */
+.bg-gradient-gift {
+  /* A rich "Royal Purple to Brand Red" gradient */
+  background: linear-gradient(135deg, #4b0082 0%, #DC143C 100%); 
+  color: white;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 3. Modal Overlay (Dark background behind popup) */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999; /* Sit on top of EVERYTHING */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px); /* Professional blurry background */
+}
