@@ -5,7 +5,8 @@
 body {
   padding-top: 0; 
   margin: 0;
-  overflow-x: hidden; /* Prevents side-scrolling on small mobile screens */
+  overflow-x: hidden; /* Prevents side-scrolling */
+  background-color: #ffffff;
 }
 
 /* --- BRAND COLORS --- */
@@ -61,60 +62,74 @@ body {
   }
 }
 
-/* --- HERO SECTION OPTIMIZATION --- */
+/* --- HERO SECTION: SPLIT LAYOUT (NEW) --- */
 .hero-section {
-  background-image: url('/imgs/pn1.png'); 
-  background-size: cover;
-  background-repeat: no-repeat;
+  /* We switched from a background image to a solid professional background.
+     This ensures text is ALWAYS readable. */
+  background-color: #f8f9fa; /* Clean Light Gray (SaaS Style) */
   
-  /* DESKTOP DEFAULT: Focus slightly above center */
-  background-position: center 30%; 
+  /* Ensure it fills the screen comfortably */
+  min-height: 90vh; 
   
-  /* Use 'dvh' (Dynamic Viewport Height) for mobile browsers */
-  min-height: 85vh; 
+  /* Spacing for the Fixed Navbar */
+  padding-top: 100px; 
+  padding-bottom: 50px;
   
   display: flex;
   align-items: center;
   position: relative;
 }
 
-.hero-overlay {
-  background-color: rgba(0, 0, 0, 0.7); 
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* The subtle red glow in the background */
+.hero-bg-gradient {
+  background: radial-gradient(circle at 80% 20%, rgba(220, 20, 60, 0.08) 0%, transparent 60%);
+  pointer-events: none; /* Let clicks pass through */
+}
+
+/* The Main Image Styling (The Person) */
+.hero-main-img {
+  /* Smooth hover animation */
+  transition: transform 0.4s ease, filter 0.4s ease;
+  /* Adds depth so they "pop" off the screen */
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,0.15));
   
-  /* Create a gradient fade so the bottom isn't a hard line */
-  background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+  /* Ensure it doesn't get ridiculously huge on massive screens */
+  max-height: 650px;
+  width: auto;
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-  width: 100%; /* Ensure it spans width */
+.hero-main-img:hover {
+  transform: translateY(-10px) scale(1.02); /* Gentle float up on hover */
 }
 
-/* === MOBILE OPTIMIZATION (Tablets & Phones) === */
+/* --- MOBILE & TABLET OPTIMIZATION --- */
 @media (max-width: 991px) {
   .hero-section {
-    /* On mobile, faces are usually at the top. 
-       'center top' ensures we don't chop heads off. */
-    background-position: center top; 
-    
-    /* On mobile, we might need more height if text is long */
-    min-height: 90dvh; 
-    padding-top: 80px; /* Space for navbar */
+    padding-top: 120px; /* Extra top space for mobile navbar */
+    padding-bottom: 60px;
+    text-align: center; /* Center align text on mobile */
+    min-height: auto; /* Let content dictate height on mobile */
   }
 
-  .hero-content {
-    text-align: center; /* Center text on mobile for better balance */
+  /* Image controls for Mobile */
+  .hero-main-img {
+    max-height: 350px !important; /* Cap height so it fits on phone screens */
+    margin-bottom: 30px; /* Space between image and text */
+  }
+
+  /* Text tweaks */
+  .hero-text-group h1 {
+    font-size: 2.5rem; /* Make headline readable */
   }
   
-  /* Ensure text doesn't touch the very edge of the screen */
-  .hero-text-group {
-    padding: 0 15px; 
+  .hero-text-group p {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+  
+  /* Make the background gradient simpler on mobile */
+  .hero-bg-gradient {
+    background: radial-gradient(circle at 50% 50%, rgba(220, 20, 60, 0.05) 0%, transparent 70%);
   }
 }
 
@@ -123,14 +138,6 @@ body {
   transition: opacity 0.5s ease-in-out, transform 0.5s ease;
   opacity: 1; 
   transform: translateY(0);
-}
-
-/* Only hover effect on DESKTOP (hover is annoying on mobile) */
-@media (min-width: 992px) {
-  .hero-content:hover .hero-text-group {
-    opacity: 0.2; /* Fade but don't disappear completely */
-    transform: translateY(-20px);
-  }
 }
 
 .blink-text {
@@ -152,7 +159,7 @@ body {
 }
 .service-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .icon-box {

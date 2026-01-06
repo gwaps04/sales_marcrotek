@@ -69,7 +69,7 @@ const NewsletterModal = ({ show, onClose }) => {
 
         {/* BLINKING HEADLINE */}
         <h3 className="blink-text fw-bold mb-4 font-montserrat text-warning">
-          Receive your first Gift with exciting newsletters Good For your business ALL FOR FREE!
+          Receive your first Gift with exciting updates Good For your business with No Commitment!
         </h3>
         
         <p className="mb-4 opacity-75 small text-white">
@@ -104,8 +104,8 @@ const NewsletterModal = ({ show, onClose }) => {
             type="submit" 
             className="btn btn-light text-danger fw-bold btn-lg mt-3 shadow-sm transform-hover"
           >
-            CLAIM MY GIFT NOW
-          </button>
+            Claim and Join For Free!
+          </button> 
         </form>
 
       </div>
