@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react' // Added useState
+import { useEffect, useState } from 'react' 
 import { Routes, Route, useLocation } from 'react-router-dom' 
 import MyNavbar from './components/MyNavbar'
 import Hero from './components/Hero'
@@ -10,7 +10,7 @@ import BookingSection from './components/BookingSection'
 import Footer from './components/Footer' 
 import ScrollToTop from './components/ScrollToTop'
 import LeadMagnet from './pages/LeadMagnet' 
-import NewsletterModal from './components/NewsletterModal' // Import the Modal
+import NewsletterModal from './components/NewsletterModal' 
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -29,21 +29,22 @@ function App() {
       easing: 'ease-in-out',
     });
 
-    // --- POPUP LOGIC ---
-    // Check if the user has already seen the newsletter
+    // --- POPUP LOGIC (UPDATED) ---
     const hasSeenNewsletter = localStorage.getItem('macrotek_newsletter_seen');
 
-    if (!hasSeenNewsletter) {
-      // If NOT seen, wait 2.5 seconds, then show it
+    // FIX: Add check for "location.pathname === '/'"
+    // This ensures it ONLY runs on the Homepage
+    if (!hasSeenNewsletter && location.pathname === '/') {
+      
       const timer = setTimeout(() => {
         setShowNewsletter(true);
-        // Mark as seen immediately so it doesn't pop up on refresh
         localStorage.setItem('macrotek_newsletter_seen', 'true');
       }, 2500);
 
-      return () => clearTimeout(timer); // Cleanup timer if user leaves quickly
+      // Cleanup: If user leaves the homepage before 2.5s, cancel the timer!
+      return () => clearTimeout(timer); 
     }
-  }, []);
+  }, [location.pathname]); // FIX: Re-run this check whenever the URL changes
 
   // 2. SCROLL LOGIC
   useEffect(() => {
@@ -61,12 +62,13 @@ function App() {
 
   return (
     <div className="d-flex flex-column min-vh-100"> 
+      {/* NOTE: MyNavbar is here. If you want to hide the navbar on the audit page too,
+         we can add a check like: {location.pathname === '/' && <MyNavbar />}
+         For now, keeping it visible as per standard.
+      */}
       <MyNavbar />
       
-      {/* THE GLOBAL POPUP 
-         It lives outside the Routes so it can overlay anything, 
-         though logic above restricts it to first load only.
-      */}
+      {/* GLOBAL POPUP */}
       <NewsletterModal 
         show={showNewsletter} 
         onClose={() => setShowNewsletter(false)} 
