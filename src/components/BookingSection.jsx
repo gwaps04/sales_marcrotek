@@ -47,7 +47,7 @@ const BookingSection = () => {
             </h2>
             <p className="lead text-light opacity-75">
               Stop guessing and start scaling. The market moves fast—competitors are stealing 
-              your leads while you think about it.
+              your sales while you think about it.
             </p>
           </div>
         </div>
@@ -119,12 +119,12 @@ const BookingSection = () => {
             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
             <i className="bi bi-lock-fill me-2"></i>
-            Lock In My 30% Discount & Demo
+            Lock In My 30% Discount & FREE Live Demo
           </button>
 
           <p className="text-white-50 mt-4 small">
             <i className="bi bi-shield-fill-check me-1"></i>
-            Zero Risk. 100% Clarity. This offer resets at midnight.
+            Storefront Website, & Sales Focused Technology.
           </p>
         </div>
 
