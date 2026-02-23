@@ -3,7 +3,7 @@ import { FaGift, FaTimes, FaSpinner } from 'react-icons/fa'; // Added Spinner Ic
 import confetti from 'canvas-confetti';
 
 // PASTE YOUR GOOGLE SCRIPT URL HERE
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_Vvxf4iyBy5La3oGwdFJcqxc_1A9VvfqKYT092_l8nG395b-FmEj2t612jLm3TSvi/exec"; 
+const GOOGLE_SCRIPT_URL = " https://script.google.com/macros/s/AKfycbwr9r-6Xt6ROmPB4kO5-NV2z97rNa2Jh0HdsPk_4EuYyUgy-wAGU5eSx4ldHJpFfq4B/exec"; 
 
 const NewsletterModal = ({ show, onClose }) => {
   // STATE MANAGEMENT

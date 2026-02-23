@@ -1,5 +1,4 @@
 import React from 'react';
-// Icons: Store (Retail), Funnel (Sales/Auto), Building (Enterprise)
 import { FaStore, FaFunnelDollar, FaBuilding } from 'react-icons/fa';
 
 const Services = () => {
@@ -18,21 +17,20 @@ const Services = () => {
           </div>
         </div>
 
-        {/* 3 COLUMN ROW */}
         <div className="row g-4">
-          
           {/* SERVICE 1: Storefront */}
           <div className="col-lg-4" data-aos="fade-up" data-aos-delay="100">
             <div className="service-card p-4 text-center">
-              {/* Icon with Red Background */}
               <div className="icon-box bg-danger text-white shadow">
                 <FaStore />
               </div>
-              <h3 className="h4 fw-bold text-dark mb-3">Modern Storefronts</h3>
-              <p className="text-muted">
-                Perfect for local businesses needing a professional 24/7 presence. We build responsive, SEO-optimized sites that showcase your brand and capture local traffic.
+              {/* Changed text-dark to text-white */}
+              <h3 className="h4 fw-bold text-white mb-3">Modern Storefronts</h3>
+              {/* Changed text-muted to text-light */}
+              <p className="text-light opacity-75">
+                Perfect for local businesses needing a professional 24/7 presence. We build responsive, SEO-optimized sites that showcase your brand.
               </p>
-              <ul className="list-unstyled text-muted small mt-3 text-start px-3">
+              <ul className="list-unstyled text-light small mt-3 text-start px-3 opacity-75">
                 <li className="mb-2">✓ Mobile-First Design</li>
                 <li className="mb-2">✓ Google Maps Integration</li>
                 <li>✓ Fast Loading Speed</li>
@@ -40,26 +38,22 @@ const Services = () => {
             </div>
           </div>
 
-          {/* SERVICE 2: Sales & Automation (Highlighted) */}
+          {/* SERVICE 2: Sales & Automation */}
           <div className="col-lg-4" data-aos="fade-up" data-aos-delay="200">
-            {/* Added a border-danger to highlight this is the 'popular' choice */}
             <div className="service-card p-4 text-center border border-2 border-danger position-relative">
-              
-              {/* Optional 'Popular' Badge */}
               <span className="position-absolute top-0 start-50 translate-middle badge rounded-pill bg-danger px-3 py-2 z-1 shadow-sm">
                 MOST POPULAR
               </span>
-
-              <div className="icon-box bg-dark text-white shadow">
+              <div className="icon-box bg-white text-danger shadow">
                 <FaFunnelDollar />
               </div>
-              <h3 className="h4 fw-bold text-dark mb-3">Sales & Automation</h3>
-              <p className="text-muted">
-                Turn visitors into revenue. We combine high-converting landing pages with backend workflow automation to follow up, schedule, and sell while you sleep.
+              <h3 className="h4 fw-bold text-white mb-3">Sales & Automation</h3>
+              <p className="text-light opacity-75">
+                Turn visitors into revenue. We combine high-converting landing pages with backend workflow automation to follow up and sell.
               </p>
-              <ul className="list-unstyled text-muted small mt-3 text-start px-3">
-                <li className="mb-2">✓ CRM Integration (GHL/HubSpot)</li>
-                <li className="mb-2">✓ Automated Email Sequences</li>
+              <ul className="list-unstyled text-light small mt-3 text-start px-3 opacity-75">
+                <li className="mb-2">✓ CRM Integration</li>
+                <li className="mb-2">✓ Automated Sequences</li>
                 <li>✓ Payment Gateway Setup</li>
               </ul>
             </div>
@@ -71,18 +65,17 @@ const Services = () => {
               <div className="icon-box bg-danger text-white shadow">
                 <FaBuilding />
               </div>
-              <h3 className="h4 fw-bold text-dark mb-3">Enterprise Apps</h3>
-              <p className="text-muted">
-                Complex data solutions for large organizations. We architect custom web applications, internal dashboards, and secure databases tailored to your operations.
+              <h3 className="h4 fw-bold text-white mb-3">Enterprise Apps</h3>
+              <p className="text-light opacity-75">
+                Complex data solutions for large organizations. We architect custom applications, dashboards, and secure databases.
               </p>
-              <ul className="list-unstyled text-muted small mt-3 text-start px-3">
-                <li className="mb-2">✓ Custom Database Architecture</li>
+              <ul className="list-unstyled text-light small mt-3 text-start px-3 opacity-75">
+                <li className="mb-2">✓ Custom DB Architecture</li>
                 <li className="mb-2">✓ Staff/Admin Portals</li>
-                <li>✓ Advanced Security Protocols</li>
+                <li>✓ Advanced Security</li>
               </ul>
             </div>
           </div>
-
         </div>
       </div>
     </section>

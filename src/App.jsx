@@ -10,6 +10,7 @@ import BookingSection from './components/BookingSection'
 import Footer from './components/Footer' 
 import ScrollToTop from './components/ScrollToTop'
 import LeadMagnet from './pages/LeadMagnet' 
+import BookingPage from './components/BookingPage'
 import NewsletterModal from './components/NewsletterModal' 
 
 import AOS from 'aos';
@@ -29,22 +30,17 @@ function App() {
       easing: 'ease-in-out',
     });
 
-    // --- POPUP LOGIC (UPDATED) ---
     const hasSeenNewsletter = localStorage.getItem('macrotek_newsletter_seen');
 
-    // FIX: Add check for "location.pathname === '/'"
-    // This ensures it ONLY runs on the Homepage
     if (!hasSeenNewsletter && location.pathname === '/') {
-      
       const timer = setTimeout(() => {
         setShowNewsletter(true);
         localStorage.setItem('macrotek_newsletter_seen', 'true');
       }, 2500);
 
-      // Cleanup: If user leaves the homepage before 2.5s, cancel the timer!
       return () => clearTimeout(timer); 
     }
-  }, [location.pathname]); // FIX: Re-run this check whenever the URL changes
+  }, [location.pathname]);
 
   // 2. SCROLL LOGIC
   useEffect(() => {
@@ -62,10 +58,6 @@ function App() {
 
   return (
     <div className="d-flex flex-column min-vh-100"> 
-      {/* NOTE: MyNavbar is here. If you want to hide the navbar on the audit page too,
-         we can add a check like: {location.pathname === '/' && <MyNavbar />}
-         For now, keeping it visible as per standard.
-      */}
       <MyNavbar />
       
       {/* GLOBAL POPUP */}
@@ -75,6 +67,7 @@ function App() {
       />
 
       <Routes>
+        {/* HOMEPAGE: Rendering sections directly as you had it before */}
         <Route path="/" element={
           <>
             <Hero />
@@ -85,8 +78,12 @@ function App() {
             <BookingSection />
           </>
         } />
+        
+        {/* OTHER PAGES */}
         <Route path="/free-audit" element={<LeadMagnet />} />
+        <Route path="/book-now" element={<BookingPage />} />
       </Routes>
+
       <Footer />
       <ScrollToTop />
     </div>
