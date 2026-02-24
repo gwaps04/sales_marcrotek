@@ -1,4 +1,5 @@
 /* --- 1. FONTS & IMPORTS --- */
+/* Montserrat for branding and Roboto Condensed for high-density data forms */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@300;400;700&display=swap');
 
 /* --- 2. GLOBAL RESETS & BASE --- */
@@ -10,6 +11,7 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+/* Fix for Hero Section spacing - pushes content below the fixed navbar */
 .hero-section {
   padding-top: 100px !important; 
 }
@@ -136,26 +138,42 @@ body {
 .dot-available { background-color: #10b981; }
 .dot-booked { background-color: #94a3b8; }
 
-/* --- 7. NEWSLETTER / GIFT MODAL (CENTERING FIX) --- */
+/* --- 7. NEWSLETTER / GIFT MODAL (MOBILE RESPONSIVE) --- */
 .custom-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.85); 
+  background: rgba(0, 0, 0, 0.9); /* Dims site backdrop */
   display: flex;
-  justify-content: center; 
-  align-items: center;    
-  z-index: 9999;           
-  backdrop-filter: blur(8px); 
-  padding: 20px;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;    /* Centers vertically */
+  z-index: 10000;           /* Stays on top */
+  backdrop-filter: blur(10px); /* Glass-blur effect */
+  padding: 15px; /* Spacing for mobile view */
 }
 
 .bg-gradient-gift {
   background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
-  border-radius: 30px;
+  border-radius: 25px;
   color: white;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh; /* Limits height on small screens */
+  overflow-y: auto; /* Allows scrolling inside modal */
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Headline and padding adjustments for mobile phones */
+@media (max-width: 576px) {
+  .bg-gradient-gift h3 {
+    font-size: 1.25rem !important;
+  }
+  .bg-gradient-gift {
+    padding: 2rem !important; 
+  }
 }
 
 .blink-text {
