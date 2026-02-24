@@ -1,5 +1,4 @@
 /* --- 1. FONTS & IMPORTS --- */
-/* Montserrat for branding and Roboto Condensed for high-density data forms */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto+Condensed:wght@300;400;700&display=swap');
 
 /* --- 2. GLOBAL RESETS & BASE --- */
@@ -11,9 +10,8 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* Fix for Hero Section spacing - pushes content below the fixed navbar */
 .hero-section {
-  padding-top: 100px !important; /* */
+  padding-top: 100px !important; 
 }
 
 @media (min-width: 992px) {
@@ -32,30 +30,27 @@ body {
   color: white;
 }
 
-/* Deep background for the Booking Section to make white text visible */
 .bg-gradient-booking {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); /* */
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
 }
 
-/* --- 4. NAVBAR STYLING & VISIBILITY --- */
+/* --- 4. NAVBAR STYLING --- */
 .smart-navbar {
   transition: transform 0.3s ease-in-out, background-color 0.3s ease;
   position: fixed; 
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1030; /* */
+  z-index: 1030;
 }
 
 .navbar-hidden { transform: translateY(-100%); }
 .navbar-visible { transform: translateY(0); }
 
-/* Right alignment for menu items */
 .ms-auto {
   margin-left: auto !important;
 }
 
-/* High-contrast navbar links */
 .smart-navbar .nav-link {
   color: rgba(255, 255, 255, 0.9) !important; 
   font-weight: 600;
@@ -67,8 +62,7 @@ body {
   text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
-/* --- 5. SERVICES SECTION REFINEMENTS --- */
-/* Glassmorphism effect for cards against dark background */
+/* --- 5. SERVICES & GLASSMORPHISM --- */
 .service-card {
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
@@ -83,7 +77,6 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Ensure icons and badges sit correctly */
 .icon-box {
   width: 60px;
   height: 60px;
@@ -122,7 +115,6 @@ body {
   background-color: #DC143C !important;
   border-color: #DC143C !important;
   color: white !important;
-  box-shadow: 0 4px 12px rgba(220, 20, 60, 0.3);
 }
 
 .slot-card-booked {
@@ -133,7 +125,6 @@ body {
   opacity: 0.7;
 }
 
-/* Status dots for the legend */
 .status-dot {
   width: 8px;
   height: 8px;
@@ -145,7 +136,37 @@ body {
 .dot-available { background-color: #10b981; }
 .dot-booked { background-color: #94a3b8; }
 
-/* --- 7. UTILITIES & ANIMATIONS --- */
+/* --- 7. NEWSLETTER / GIFT MODAL (CENTERING FIX) --- */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85); 
+  display: flex;
+  justify-content: center; 
+  align-items: center;    
+  z-index: 9999;           
+  backdrop-filter: blur(8px); 
+  padding: 20px;
+}
+
+.bg-gradient-gift {
+  background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+  border-radius: 30px;
+  color: white;
+}
+
+.blink-text {
+  animation: blinker 1.5s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.7; }
+}
+
+/* --- 8. UTILITIES & ANIMATIONS --- */
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
 }
@@ -161,6 +182,5 @@ body {
 .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
 .cursor-pointer { cursor: pointer; }
 
-/* Custom scrollbar for multi-select dropdowns */
 .custom-dropdown-menu::-webkit-scrollbar { width: 5px; }
 .custom-dropdown-menu::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
