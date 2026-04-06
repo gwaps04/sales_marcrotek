@@ -2,10 +2,255 @@ import React, { useState, useRef, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
 const BookingForm = () => {
+  // Woz: Comprehensive list of international calling codes
+  const countryCodes = [
+    { name: "Philippines", code: "+63" },
+    { name: "Afghanistan", code: "+93" },
+    { name: "Albania", code: "+355" },
+    { name: "Algeria", code: "+213" },
+    { name: "American Samoa", code: "+1-684" },
+    { name: "Andorra", code: "+376" },
+    { name: "Angola", code: "+244" },
+    { name: "Anguilla", code: "+1-264" },
+    { name: "Antarctica", code: "+672" },
+    { name: "Antigua and Barbuda", code: "+1-268" },
+    { name: "Argentina", code: "+54" },
+    { name: "Armenia", code: "+374" },
+    { name: "Aruba", code: "+297" },
+    { name: "Australia", code: "+61" },
+    { name: "Austria", code: "+43" },
+    { name: "Azerbaijan", code: "+994" },
+    { name: "Bahamas", code: "+1-242" },
+    { name: "Bahrain", code: "+973" },
+    { name: "Bangladesh", code: "+880" },
+    { name: "Barbados", code: "+1-246" },
+    { name: "Belarus", code: "+375" },
+    { name: "Belgium", code: "+32" },
+    { name: "Belize", code: "+501" },
+    { name: "Benin", code: "+229" },
+    { name: "Bermuda", code: "+1-441" },
+    { name: "Bhutan", code: "+975" },
+    { name: "Bolivia", code: "+591" },
+    { name: "Bosnia and Herzegovina", code: "+387" },
+    { name: "Botswana", code: "+267" },
+    { name: "Brazil", code: "+55" },
+    { name: "British Indian Ocean Territory", code: "+246" },
+    { name: "British Virgin Islands", code: "+1-284" },
+    { name: "Brunei", code: "+673" },
+    { name: "Bulgaria", code: "+359" },
+    { name: "Burkina Faso", code: "+226" },
+    { name: "Burundi", code: "+257" },
+    { name: "Cambodia", code: "+855" },
+    { name: "Cameroon", code: "+237" },
+    { name: "Canada", code: "+1" },
+    { name: "Cape Verde", code: "+238" },
+    { name: "Cayman Islands", code: "+1-345" },
+    { name: "Central African Republic", code: "+236" },
+    { name: "Chad", code: "+235" },
+    { name: "Chile", code: "+56" },
+    { name: "China", code: "+86" },
+    { name: "Christmas Island", code: "+61" },
+    { name: "Cocos Islands", code: "+61" },
+    { name: "Colombia", code: "+57" },
+    { name: "Comoros", code: "+269" },
+    { name: "Cook Islands", code: "+682" },
+    { name: "Costa Rica", code: "+506" },
+    { name: "Croatia", code: "+385" },
+    { name: "Cuba", code: "+53" },
+    { name: "Curacao", code: "+599" },
+    { name: "Cyprus", code: "+357" },
+    { name: "Czech Republic", code: "+420" },
+    { name: "Democratic Republic of the Congo", code: "+243" },
+    { name: "Denmark", code: "+45" },
+    { name: "Djibouti", code: "+253" },
+    { name: "Dominica", code: "+1-767" },
+    { name: "Dominican Republic", code: "+1-809" },
+    { name: "East Timor", code: "+670" },
+    { name: "Ecuador", code: "+593" },
+    { name: "Egypt", code: "+20" },
+    { name: "El Salvador", code: "+503" },
+    { name: "Equatorial Guinea", code: "+240" },
+    { name: "Eritrea", code: "+291" },
+    { name: "Estonia", code: "+372" },
+    { name: "Ethiopia", code: "+251" },
+    { name: "Falkland Islands", code: "+500" },
+    { name: "Faroe Islands", code: "+298" },
+    { name: "Fiji", code: "+679" },
+    { name: "Finland", code: "+358" },
+    { name: "France", code: "+33" },
+    { name: "French Polynesia", code: "+689" },
+    { name: "Gabon", code: "+241" },
+    { name: "Gambia", code: "+220" },
+    { name: "Georgia", code: "+995" },
+    { name: "Germany", code: "+49" },
+    { name: "Ghana", code: "+233" },
+    { name: "Gibraltar", code: "+350" },
+    { name: "Greece", code: "+30" },
+    { name: "Greenland", code: "+299" },
+    { name: "Grenada", code: "+1-473" },
+    { name: "Guam", code: "+1-671" },
+    { name: "Guatemala", code: "+502" },
+    { name: "Guernsey", code: "+44-1481" },
+    { name: "Guinea", code: "+224" },
+    { name: "Guinea-Bissau", code: "+245" },
+    { name: "Guyana", code: "+592" },
+    { name: "Haiti", code: "+509" },
+    { name: "Honduras", code: "+504" },
+    { name: "Hong Kong", code: "+852" },
+    { name: "Hungary", code: "+36" },
+    { name: "Iceland", code: "+354" },
+    { name: "India", code: "+91" },
+    { name: "Indonesia", code: "+62" },
+    { name: "Iran", code: "+98" },
+    { name: "Iraq", code: "+964" },
+    { name: "Ireland", code: "+353" },
+    { name: "Isle of Man", code: "+44-1624" },
+    { name: "Israel", code: "+972" },
+    { name: "Italy", code: "+39" },
+    { name: "Ivory Coast", code: "+225" },
+    { name: "Jamaica", code: "+1-876" },
+    { name: "Japan", code: "+81" },
+    { name: "Jersey", code: "+44-1534" },
+    { name: "Jordan", code: "+962" },
+    { name: "Kazakhstan", code: "+7" },
+    { name: "Kenya", code: "+254" },
+    { name: "Kiribati", code: "+686" },
+    { name: "Kosovo", code: "+383" },
+    { name: "Kuwait", code: "+965" },
+    { name: "Kyrgyzstan", code: "+996" },
+    { name: "Laos", code: "+856" },
+    { name: "Latvia", code: "+371" },
+    { name: "Lebanon", code: "+961" },
+    { name: "Lesotho", code: "+266" },
+    { name: "Liberia", code: "+231" },
+    { name: "Libya", code: "+218" },
+    { name: "Liechtenstein", code: "+423" },
+    { name: "Lithuania", code: "+370" },
+    { name: "Luxembourg", code: "+352" },
+    { name: "Macau", code: "+853" },
+    { name: "Macedonia", code: "+389" },
+    { name: "Madagascar", code: "+261" },
+    { name: "Malawi", code: "+265" },
+    { name: "Malaysia", code: "+60" },
+    { name: "Maldives", code: "+960" },
+    { name: "Mali", code: "+223" },
+    { name: "Malta", code: "+356" },
+    { name: "Marshall Islands", code: "+692" },
+    { name: "Mauritania", code: "+222" },
+    { name: "Mauritius", code: "+230" },
+    { name: "Mayotte", code: "+262" },
+    { name: "Mexico", code: "+52" },
+    { name: "Micronesia", code: "+691" },
+    { name: "Moldova", code: "+373" },
+    { name: "Monaco", code: "+377" },
+    { name: "Mongolia", code: "+976" },
+    { name: "Montenegro", code: "+382" },
+    { name: "Montserrat", code: "+1-664" },
+    { name: "Morocco", code: "+212" },
+    { name: "Mozambique", code: "+258" },
+    { name: "Myanmar", code: "+95" },
+    { name: "Namibia", code: "+264" },
+    { name: "Nauru", code: "+674" },
+    { name: "Nepal", code: "+977" },
+    { name: "Netherlands", code: "+31" },
+    { name: "Netherlands Antilles", code: "+599" },
+    { name: "New Caledonia", code: "+687" },
+    { name: "New Zealand", code: "+64" },
+    { name: "Nicaragua", code: "+505" },
+    { name: "Niger", code: "+227" },
+    { name: "Nigeria", code: "+234" },
+    { name: "Niue", code: "+683" },
+    { name: "North Korea", code: "+850" },
+    { name: "Northern Mariana Islands", code: "+1-670" },
+    { name: "Norway", code: "+47" },
+    { name: "Oman", code: "+968" },
+    { name: "Pakistan", code: "+92" },
+    { name: "Palau", code: "+680" },
+    { name: "Palestine", code: "+970" },
+    { name: "Panama", code: "+507" },
+    { name: "Papua New Guinea", code: "+675" },
+    { name: "Paraguay", code: "+595" },
+    { name: "Peru", code: "+51" },
+    { name: "Pitcairn", code: "+64" },
+    { name: "Poland", code: "+48" },
+    { name: "Portugal", code: "+351" },
+    { name: "Puerto Rico", code: "+1-787" },
+    { name: "Qatar", code: "+974" },
+    { name: "Republic of the Congo", code: "+242" },
+    { name: "Reunion", code: "+262" },
+    { name: "Romania", code: "+40" },
+    { name: "Russia", code: "+7" },
+    { name: "Rwanda", code: "+250" },
+    { name: "Saint Barthelemy", code: "+590" },
+    { name: "Saint Helena", code: "+290" },
+    { name: "Saint Kitts and Nevis", code: "+1-869" },
+    { name: "Saint Lucia", code: "+1-758" },
+    { name: "Saint Martin", code: "+590" },
+    { name: "Saint Pierre and Miquelon", code: "+508" },
+    { name: "Saint Vincent and the Grenadines", code: "+1-784" },
+    { name: "Samoa", code: "+685" },
+    { name: "San Marino", code: "+378" },
+    { name: "Sao Tome and Principe", code: "+239" },
+    { name: "Saudi Arabia", code: "+966" },
+    { name: "Senegal", code: "+221" },
+    { name: "Serbia", code: "+381" },
+    { name: "Seychelles", code: "+248" },
+    { name: "Sierra Leone", code: "+232" },
+    { name: "Singapore", code: "+65" },
+    { name: "Sint Maarten", code: "+1-721" },
+    { name: "Slovakia", code: "+421" },
+    { name: "Slovenia", code: "+386" },
+    { name: "Solomon Islands", code: "+677" },
+    { name: "Somalia", code: "+252" },
+    { name: "South Africa", code: "+27" },
+    { name: "South Korea", code: "+82" },
+    { name: "South Sudan", code: "+211" },
+    { name: "Spain", code: "+34" },
+    { name: "Sri Lanka", code: "+94" },
+    { name: "Sudan", code: "+249" },
+    { name: "Suriname", code: "+597" },
+    { name: "Svalbard and Jan Mayen", code: "+47" },
+    { name: "Swaziland", code: "+268" },
+    { name: "Sweden", code: "+46" },
+    { name: "Switzerland", code: "+41" },
+    { name: "Syria", code: "+963" },
+    { name: "Taiwan", code: "+886" },
+    { name: "Tajikistan", code: "+992" },
+    { name: "Tanzania", code: "+255" },
+    { name: "Thailand", code: "+66" },
+    { name: "Togo", code: "+228" },
+    { name: "Tokelau", code: "+690" },
+    { name: "Tonga", code: "+676" },
+    { name: "Trinidad and Tobago", code: "+1-868" },
+    { name: "Tunisia", code: "+216" },
+    { name: "Turkey", code: "+90" },
+    { name: "Turkmenistan", code: "+993" },
+    { name: "Turks and Caicos Islands", code: "+1-649" },
+    { name: "Tuvalu", code: "+688" },
+    { name: "U.S. Virgin Islands", code: "+1-340" },
+    { name: "Uganda", code: "+256" },
+    { name: "Ukraine", code: "+380" },
+    { name: "United Arab Emirates", code: "+971" },
+    { name: "United Kingdom", code: "+44" },
+    { name: "United States", code: "+1" },
+    { name: "Uruguay", code: "+598" },
+    { name: "Uzbekistan", code: "+998" },
+    { name: "Vanuatu", code: "+678" },
+    { name: "Vatican", code: "+379" },
+    { name: "Venezuela", code: "+58" },
+    { name: "Vietnam", code: "+84" },
+    { name: "Wallis and Futuna", code: "+681" },
+    { name: "Western Sahara", code: "+212" },
+    { name: "Yemen", code: "+967" },
+    { name: "Zambia", code: "+260" },
+    { name: "Zimbabwe", code: "+263" }
+  ];
+
   const initialState = {
     firstName: '',
     lastName: '',
     mobile: '',
+    countryCode: '+63', // Woz: Default to Philippines
     email: '',
     industries: [],
     automationAreas: [],
@@ -17,14 +262,30 @@ const BookingForm = () => {
   const [existingBookings, setExistingBookings] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [displayClientId, setDisplayClientId] = useState(''); 
   
-  // Real-time validation state
   const [emailError, setEmailError] = useState('');
+  const [mobileError, setMobileError] = useState(''); 
   
   const [isIndustryOpen, setIsIndustryOpen] = useState(false);
   const [isAutomationOpen, setIsAutomationOpen] = useState(false);
   const industryRef = useRef(null);
   const automationRef = useRef(null);
+
+  const getNextClientId = async () => {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('client_id')
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (error || !data || !data.client_id) return "client0001";
+
+    const lastIdNumber = parseInt(data.client_id.replace('client', ''));
+    const nextNumber = lastIdNumber + 1;
+    return `client${nextNumber.toString().padStart(4, '0')}`;
+  };
 
   const businessHours = [
     { label: "09:00 AM - 10:00 AM", value: "09:00 AM" },
@@ -66,61 +327,35 @@ const BookingForm = () => {
     "Others"
   ];
 
-  // --- VALIDATION HELPERS ---
-  const isValidEmail = (email) => {
-    const strictEmailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return strictEmailRegex.test(email.trim());
-  };
+  const isValidEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.trim());
+  const isValidMobile = (mobile) => /^\d{7,15}$/.test(mobile.trim().replace(/\D/g, ''));
 
-  const isValidMobile = (mobile) => {
-    const sanitized = mobile.trim().replace(/\s/g, '');
-    const phMobileRegex = /^(09|\+639)\d{9}$/;
-    return phMobileRegex.test(sanitized);
-  };
-
-  // --- NEW: TIME-CHECK HELPER FOR MANILA ---
   const isSlotInPast = (slotValue) => {
     const todayInManila = new Intl.DateTimeFormat('en-ZA', {
-      timeZone: 'Asia/Manila',
-      year: 'numeric', month: '2-digit', day: '2-digit'
+      timeZone: 'Asia/Manila', year: 'numeric', month: '2-digit', day: '2-digit'
     }).format(new Date()).replace(/\//g, '-');
 
     if (formData.selectedDate === todayInManila) {
       const now = new Date();
       const currentManilaHour = parseInt(new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Asia/Manila',
-        hour: 'numeric',
-        hour12: false
+        timeZone: 'Asia/Manila', hour: 'numeric', hour12: false
       }).format(now));
-
       const slotHour24 = parseInt(slotValue.split(':')[0]);
       const isPM = slotValue.includes('PM') && slotHour24 !== 12;
       const finalSlotHour = isPM ? slotHour24 + 12 : (slotValue.includes('AM') && slotHour24 === 12 ? 0 : slotHour24);
-
       return currentManilaHour >= finalSlotHour;
     }
     return false;
   };
 
-  // --- LIVE SYNC LOGIC (SUPABASE REALTIME) ---
   useEffect(() => {
     const fetchTakenSlots = async () => {
-      const { data } = await supabase.from('bookings').select('preferred_date');
-      if (data) {
-        setExistingBookings(data.map(b => b.preferred_date));
-      }
+      const { data } = await supabase.from('schedules').select('booking_id');
+      if (data) setExistingBookings(data.map(b => b.booking_id));
     };
     fetchTakenSlots();
-
-    const channel = supabase
-      .channel('live-booking-updates')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings' }, 
-      () => fetchTakenSlots()).subscribe();
-
-    return () => { supabase.removeChannel(channel); };
   }, [isSuccess]);
 
-  // --- FORM HANDLING ---
   const toggleSelection = (field, val) => {
     setFormData(prev => {
       const current = prev[field];
@@ -129,121 +364,95 @@ const BookingForm = () => {
     });
   };
 
-  const handleEmailChange = (e) => {
-    const val = e.target.value;
-    setFormData({...formData, email: val});
-    if (val && !isValidEmail(val)) {
-      setEmailError('Invalid format. Use example@email.com');
-    } else {
-      setEmailError('');
-    }
-  };
-
-  const isFormInvalid = 
-    !formData.firstName || 
-    !formData.lastName || 
-    !isValidEmail(formData.email) || 
-    !isValidMobile(formData.mobile) ||
-    formData.industries.length === 0 ||
-    formData.automationAreas.length === 0 ||
-    !formData.selectedDate ||
-    !formData.selectedSlot;
+  const isFormInvalid = !formData.firstName || !formData.lastName || !isValidEmail(formData.email) || !isValidMobile(formData.mobile) || formData.industries.length === 0 || formData.automationAreas.length === 0 || !formData.selectedDate || !formData.selectedSlot;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isFormInvalid) return;
-
-    const plainTextDateTime = `${formData.selectedDate} ${formData.selectedSlot}`;
     setIsSubmitting(true);
 
     try {
-      const cleanEmail = formData.email.trim().toLowerCase();
-      const cleanMobile = formData.mobile.trim().replace(/\s/g, '');
+      // Woz: 1. Format contact details for validation
+      const cleanEmail = formData.email.toLowerCase().trim();
+      const activeCountryCode = formData.countryCode || '+63';
+      const cleanMobile = formData.mobile.replace(/\D/g, ''); 
+      const fullMobile = `${activeCountryCode}${cleanMobile}`;
 
-      const { data: existingLead } = await supabase
+      // Woz: 2. Duplicate Check - Search for existing email OR mobile number
+      const { data: existingClient, error: checkError } = await supabase
         .from('bookings')
         .select('email, mobile')
-        .or(`email.eq.${cleanEmail},mobile.eq.${cleanMobile}`)
+        .or(`email.eq.${cleanEmail},mobile.eq.${fullMobile}`)
         .maybeSingle();
 
-      if (existingLead) {
-        alert("This Email or Mobile is already registered.");
+      if (checkError) throw checkError;
+
+      // Woz: 3. If a match is found, show an alert and stop the submission
+      if (existingClient) {
+        const isEmailMatch = existingClient.email.toLowerCase() === cleanEmail;
+        alert(`A booking with this ${isEmailMatch ? 'email address' : 'mobile number'} already exists. Please use different contact details or contact support.`);
         setIsSubmitting(false);
         return;
       }
 
-      const { error: insertError } = await supabase
+      // Woz: 4. Proceed with unique client creation
+      const newClientId = await getNextClientId();
+      const bookingIdValue = `${formData.selectedDate} ${formData.selectedSlot} (GMT+8)`;
+      
+      const { error: clientError } = await supabase
         .from('bookings')
         .insert([{
+          client_id: newClientId,
           first_name: formData.firstName,
           last_name: formData.lastName,
-          mobile: cleanMobile,
+          mobile: fullMobile,
           email: cleanEmail,
           industries: formData.industries,
           automation_areas: formData.automationAreas,
-          preferred_date: plainTextDateTime 
+          meeting_date: bookingIdValue
         }]);
 
-      if (insertError) throw insertError;
+      if (clientError) throw clientError;
+
+      const { error: scheduleError } = await supabase
+        .from('schedules')
+        .insert([{
+          client_id: newClientId,
+          booking_id: bookingIdValue
+        }]);
+
+      if (scheduleError) throw scheduleError;
+
+      setDisplayClientId(newClientId);
       setIsSuccess(true);
     } catch (error) {
-      console.error("Error:", error);
-      alert("Unable to save booking. Check connection.");
+      console.error("Database error:", error);
+      alert("Submission failed. Ensure the tables exist in Supabase.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // --- SUCCESS STATE ---
   if (isSuccess) {
     return (
-      <div className="text-center animate-fade-in font-narrow py-4 px-2">
-        <div className="mb-4">
-          <div className="display-1 text-success animate-pulse-subtle">
-            <i className="bi bi-check-circle-fill"></i>
-          </div>
-        </div>
+      <div className="text-center animate-fade-in font-narrow py-5 px-4">
+        <div className="mb-4 text-success display-1"><i className="bi bi-check-circle-fill"></i></div>
         <h2 className="fw-bold text-dark text-uppercase mb-2">Booking Confirmed!</h2>
-        <p className="text-secondary mb-4 px-lg-5">Your session has been successfully scheduled. We look forward to meeting you.</p>
+        
+        <p className="text-secondary mb-1">A summary has been sent to:</p>
+        <h4 className="text-macrotek-orange fw-bold mb-3">{formData.email}</h4>
+        
+        <p className="text-secondary mb-1">Scheduled Date (Manila Time):</p>
+        <h4 className="text-dark fw-bold mb-4">{formData.selectedDate} at {formData.selectedSlot}</h4>
 
-        <div className="bg-light rounded-4 p-4 mb-5 shadow-sm border border-1 mx-auto" style={{ maxWidth: '450px' }}>
-          <h6 className="text-uppercase fw-bold text-danger letter-spacing-1 mb-3 small">Session Summary</h6>
-          <div className="d-flex flex-column gap-3 text-start">
-            <div className="d-flex align-items-center">
-              <i className="bi bi-calendar3 text-danger me-3 h5 mb-0"></i>
-              <div>
-                <small className="text-secondary d-block x-small fw-bold text-uppercase">Date</small>
-                <span className="fw-bold text-dark">{new Date(formData.selectedDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center">
-              <i className="bi bi-clock text-danger me-3 h5 mb-0"></i>
-              <div>
-                <small className="text-secondary d-block x-small fw-bold text-uppercase">Time Slot (Manila)</small>
-                <span className="fw-bold text-dark">{formData.selectedSlot}</span>
-              </div>
-            </div>
-            <div className="d-flex align-items-center">
-              <i className="bi bi-person-check text-danger me-3 h5 mb-0"></i>
-              <div>
-                <small className="text-secondary d-block x-small fw-bold text-uppercase">Representative</small>
-                <span className="fw-bold text-dark">{formData.firstName} {formData.lastName}</span>
-              </div>
-            </div>
-          </div>
+        <div className="bg-light rounded-4 p-4 mb-4 border shadow-sm">
+          <p className="mb-0 small fw-bold text-uppercase text-macrotek-orange">Next Step</p>
+          <p className="mb-0 small text-muted">
+            Please check your email inbox (and spam folder) for your <strong>Confirmation and Acknowledgement</strong> notice.
+          </p>
         </div>
 
-        <div className="mb-5 text-dark">
-          <h6 className="fw-bold text-uppercase x-small text-secondary mb-3">What happens next?</h6>
-          <div className="row g-3 justify-content-center">
-            <div className="col-10 col-md-5 small"><i className="bi bi-envelope-at me-2 text-danger"></i>Check your email for an invite.</div>
-            <div className="col-10 col-md-5 small"><i className="bi bi-zoom me-2 text-danger"></i>Meeting link arrives 15m before.</div>
-          </div>
-        </div>
-
-        <button className="btn btn-outline-danger btn-lg rounded-pill px-5 fw-bold shadow-sm" onClick={() => { setIsSuccess(false); setFormData(initialState); }}>
-          Book Another Session
-        </button>
+        <button className="btn btn-outline-dark btn-lg rounded-pill px-5 fw-bold" onClick={() => { setIsSuccess(false); setFormData(initialState); }}>Return to Booking Form</button>
       </div>
     );
   }
@@ -252,38 +461,51 @@ const BookingForm = () => {
     <form onSubmit={handleSubmit} className="text-dark font-narrow" noValidate>
       <div className="text-center mb-4">
         <h3 className="fw-bold text-uppercase letter-spacing-1 mb-1">Schedule Your Session</h3>
-        <p className="text-muted small">All fields required. Button enables when valid.</p>
+        <p className="text-muted small">All fields are required to proceed.</p>
       </div>
-
       <div className="row g-3">
         <div className="col-md-6">
-          <label className="form-label small fw-bold text-uppercase text-muted">First Name *</label>
-          <input type="text" className="form-control form-control-lg bg-light border-0 shadow-sm" required 
-            value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} />
+          <label className="form-label small fw-bold text-muted">FIRST NAME *</label>
+          <input type="text" className="form-control bg-light border-0 shadow-sm" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} />
         </div>
         <div className="col-md-6">
-          <label className="form-label small fw-bold text-uppercase text-muted">Last Name *</label>
-          <input type="text" className="form-control form-control-lg bg-light border-0 shadow-sm" required 
-            value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} />
+          <label className="form-label small fw-bold text-muted">LAST NAME *</label>
+          <input type="text" className="form-control bg-light border-0 shadow-sm" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} />
         </div>
         
         <div className="col-md-6">
-          <label className="form-label small fw-bold text-uppercase text-muted">Mobile Number *</label>
-          <input type="tel" className="form-control form-control-lg bg-light border-0 shadow-sm" required 
-            placeholder="09XXXXXXXXX" 
-            value={formData.mobile} onChange={e => setFormData({...formData, mobile: e.target.value})} />
+          <label className="form-label small fw-bold text-muted">MOBILE NUMBER *</label>
+          <div className="input-group">
+            <select 
+              className="form-select bg-light border-0 shadow-sm" 
+              style={{ maxWidth: '130px', fontSize: '0.85rem' }}
+              value={formData.countryCode}
+              onChange={e => setFormData({...formData, countryCode: e.target.value})}
+            >
+              {countryCodes.map((c, i) => (
+                <option key={i} value={c.code}>{c.name} ({c.code})</option>
+              ))}
+            </select>
+            <input 
+              type="tel" 
+              className={`form-control bg-light border-0 shadow-sm ${mobileError ? 'border border-danger' : ''}`} 
+              placeholder="9XXXXXXXXX" 
+              value={formData.mobile} 
+              onChange={e => { 
+                const val = e.target.value.replace(/\D/g, ''); 
+                setFormData({...formData, mobile: val}); 
+                setMobileError(val && !isValidMobile(val) ? 'Invalid Number' : ''); 
+              }} 
+            />
+          </div>
         </div>
 
         <div className="col-md-6">
-          <label className="form-label small fw-bold text-uppercase text-muted">Business Email *</label>
-          <input type="email" className={`form-control form-control-lg bg-light border-0 shadow-sm ${emailError ? 'border border-danger' : ''}`} 
-            required placeholder="name@email.com" value={formData.email} onChange={handleEmailChange} />
-          {emailError && <div className="text-danger small fw-bold mt-1" style={{fontSize: '0.75rem'}}>{emailError}</div>}
+          <label className="form-label small fw-bold text-muted">BUSINESS EMAIL *</label>
+          <input type="email" className={`form-control bg-light border-0 shadow-sm ${emailError ? 'border border-danger' : ''}`} placeholder="name@email.com" value={formData.email} onChange={e => { setFormData({...formData, email: e.target.value}); setEmailError(e.target.value && !isValidEmail(e.target.value) ? 'Invalid Email' : ''); }} />
         </div>
-
-        {/* Dropdowns logic */}
         <div className="col-12 mt-3" ref={industryRef}>
-          <label className="form-label small fw-bold text-uppercase text-muted">Industry *</label>
+          <label className="form-label small fw-bold text-muted">INDUSTRY *</label>
           <div className="form-select bg-light border-0 cursor-pointer py-2" onClick={() => { setIsIndustryOpen(!isIndustryOpen); setIsAutomationOpen(false); }}>
             {formData.industries.length === 0 ? "Choose Industry" : `${formData.industries.length} Selected`}
           </div>
@@ -298,9 +520,8 @@ const BookingForm = () => {
             </div>
           )}
         </div>
-
         <div className="col-12 mt-3" ref={automationRef}>
-          <label className="form-label small fw-bold text-uppercase text-muted">Automation Goals *</label>
+          <label className="form-label small fw-bold text-muted">AUTOMATION GOALS *</label>
           <div className="form-select bg-light border-0 cursor-pointer py-2" onClick={() => { setIsAutomationOpen(!isAutomationOpen); setIsIndustryOpen(false); }}>
             {formData.automationAreas.length === 0 ? "Choose Goals" : `${formData.automationAreas.length} Selected`}
           </div>
@@ -315,34 +536,30 @@ const BookingForm = () => {
             </div>
           )}
         </div>
-
         <div className="col-12 mt-3">
-          <label className="form-label small fw-bold text-uppercase text-muted">1. Select Date *</label>
-          <input type="date" className="form-control form-control-lg bg-light border-0" required min={new Date().toISOString().split('T')[0]} 
-            onChange={e => {
-                const day = new Date(e.target.value).getDay();
-                if (day === 0) { alert("Sundays unavailable."); e.target.value = ""; } 
-                else { setFormData({...formData, selectedDate: e.target.value}); }
-            }}
-          />
-        </div>
+          <label className="form-label small fw-bold text-muted">Preferred date for the online meeting*</label>
+          
+          {/* Woz: Manila Timezone Disclaimer */}
+          <div className="mb-2">
+            <span className="badge bg-warning text-dark px-3 py-2 rounded-pill shadow-sm">
+              <i className="bi bi-clock-fill me-2"></i>
+              All times are shown in Manila Time (GMT+8)
+            </span>
+          </div>
 
+          <input type="date" className="form-control form-control-lg bg-light border-0" min={new Date().toISOString().split('T')[0]} onChange={e => setFormData({...formData, selectedDate: e.target.value})} />
+        </div>
         {formData.selectedDate && (
           <div className="col-12 mt-4 animate-fade-in">
-            <label className="form-label small fw-bold text-uppercase text-muted mb-2">2. Select Time Slot *</label>
+            <label className="form-label small fw-bold text-muted mb-2">2. SELECT TIME SLOT *</label>
             <div className="row g-2">
               {businessHours.map((slot, index) => {
-                const checkString = `${formData.selectedDate} ${slot.value}`;
-                const isBookedInDB = existingBookings.includes(checkString);
-                const isFinishedToday = isSlotInPast(slot.value);
-                const isUnavailable = isBookedInDB || isFinishedToday;
-                const isSelected = formData.selectedSlot === slot.value;
+                const checkString = `${formData.selectedDate} ${slot.value} (GMT+8)`;
+                const isUnavailable = existingBookings.includes(checkString) || isSlotInPast(slot.value);
                 return (
                   <div className="col-6 col-sm-4" key={index}>
-                    <div className={`slot-card ${isUnavailable ? 'slot-card-booked' : isSelected ? 'slot-card-selected' : ''}`}
-                      onClick={() => !isUnavailable && setFormData({...formData, selectedSlot: slot.value})}>
+                    <div className={`slot-card ${isUnavailable ? 'slot-card-booked' : formData.selectedSlot === slot.value ? 'slot-card-selected' : ''}`} onClick={() => !isUnavailable && setFormData({...formData, selectedSlot: slot.value})}>
                       <div className="small fw-bold">{slot.label}</div>
-                      {isFinishedToday && !isBookedInDB && <div style={{fontSize: '0.6rem', opacity: 0.6}}>Passed</div>}
                     </div>
                   </div>
                 );
@@ -351,20 +568,15 @@ const BookingForm = () => {
           </div>
         )}
       </div>
-
-      <button type="submit" disabled={isSubmitting || isFormInvalid}
-        className={`btn btn-danger btn-lg w-100 py-3 fw-bold rounded-pill shadow-lg mt-5 text-uppercase ${isFormInvalid ? 'bg-secondary border-secondary opacity-50 cursor-not-allowed' : ''}`}>
-        {isSubmitting ? "Validating..." : isFormInvalid ? "Incomplete Form" : "Submit My Session Request"}
+      <button type="submit" disabled={isSubmitting || isFormInvalid} className={`btn btn-danger btn-lg w-100 py-3 fw-bold rounded-pill shadow-lg mt-5 text-uppercase ${isFormInvalid ? 'bg-secondary border-secondary opacity-50 cursor-not-allowed' : ''}`}>
+        {isSubmitting ? "Generating Client ID..." : "Submit Session Request"}
       </button>
-
       <style>{`
         .cursor-pointer { cursor: pointer; }
         .cursor-not-allowed { cursor: not-allowed !important; }
-        .custom-dropdown-menu { max-height: 250px; overflow-y: auto; }
+        .custom-dropdown-menu { max-height: 250px; overflow-y: auto; z-index: 2000; }
         .animate-fade-in { animation: fadeIn 0.4s ease-out; }
-        .animate-pulse-subtle { animation: pulse-subtle 2s infinite ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse-subtle { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
       `}</style>
     </form>
   );

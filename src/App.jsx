@@ -1,55 +1,68 @@
 import { useEffect, useState } from 'react' 
-import { Routes, Route, useLocation } from 'react-router-dom' 
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom' 
+import { supabase } from './supabaseClient'
+
+// Layout Components
 import MyNavbar from './components/MyNavbar'
+import Footer from './components/Footer' 
+import ScrollToTop from './components/ScrollToTop'
+import NewsletterModal from './components/NewsletterModal' 
+
+// Landing Page Sections
 import Hero from './components/Hero'
 import AuthorityBar from './components/AuthorityBar'
 import PainSolution from './components/PainSolution'
 import Services from './components/Services'
 import Testimonials from './components/Testimonials' 
 import BookingSection from './components/BookingSection'
-import Footer from './components/Footer' 
-import ScrollToTop from './components/ScrollToTop'
-import LeadMagnet from './pages/LeadMagnet' 
+
+// Page Components
+import Step1Watch from './pages/Step1Watch' // Woz: Added new page
 import BookingPage from './components/BookingPage'
-import NewsletterModal from './components/NewsletterModal' 
+import PreQualificationAssessment from './pages/PreQualificationAssessment'
+import ClientFeedbackForm from './pages/ClientFeedbackForm'
+
+// --- ADMINISTRATOR & CRM COMPONENTS ---
+import AdministratorLogin from './pages/AdministratorLogin'
+import Administrator from './pages/Administrator'
+import ManageClient from './pages/ManageClient' 
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function App() {
   const location = useLocation();
-  
-  // STATE: Controls the Newsletter Popup
   const [showNewsletter, setShowNewsletter] = useState(false);
+  const [session, setSession] = useState(null);
 
-  // 1. REFRESH & ANIMATION LOGIC
+  // Woz: Updated logic to hide navbar/footer on CRM pages AND the new step1-watch page.
+  const hideLayout = 
+    location.pathname === '/admin-login' || 
+    location.pathname.startsWith('/administrator') || 
+    location.pathname === '/feedback' ||
+    location.pathname === '/step1-watch'; // Woz: Hide layout for the new page
+
   useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: true,
-      easing: 'ease-in-out',
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
     });
 
-    const hasSeenNewsletter = localStorage.getItem('macrotek_newsletter_seen');
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
 
-    if (!hasSeenNewsletter && location.pathname === '/') {
-      const timer = setTimeout(() => {
-        setShowNewsletter(true);
-        localStorage.setItem('macrotek_newsletter_seen', 'true');
-      }, 2500);
+    return () => subscription.unsubscribe();
+  }, []);
 
-      return () => clearTimeout(timer); 
-    }
+  useEffect(() => {
+    AOS.init({ duration: 1000, once: true, easing: 'ease-in-out' });
   }, [location.pathname]);
 
-  // 2. SCROLL LOGIC
   useEffect(() => {
       if (location.hash) {
         const element = document.getElementById(location.hash.substring(1));
         if (element) {
-          setTimeout(() => {
-            element.scrollIntoView({ behavior: 'smooth' });
-          }, 100); 
+          setTimeout(() => { element.scrollIntoView({ behavior: 'smooth' }); }, 100); 
         }
       } else {
         window.scrollTo(0, 0);
@@ -58,16 +71,17 @@ function App() {
 
   return (
     <div className="d-flex flex-column min-vh-100"> 
-      <MyNavbar />
+      {!hideLayout && <MyNavbar />}
       
-      {/* GLOBAL POPUP */}
-      <NewsletterModal 
-        show={showNewsletter} 
-        onClose={() => setShowNewsletter(false)} 
-      />
+      {!hideLayout && (
+        <NewsletterModal 
+          show={showNewsletter} 
+          onClose={() => setShowNewsletter(false)} 
+        />
+      )}
 
       <Routes>
-        {/* HOMEPAGE: Rendering sections directly as you had it before */}
+        {/* Main Landing Page */}
         <Route path="/" element={
           <>
             <Hero />
@@ -79,12 +93,30 @@ function App() {
           </>
         } />
         
-        {/* OTHER PAGES */}
-        <Route path="/free-audit" element={<LeadMagnet />} />
+        {/* Client-Facing Routes */}
+        {/* Woz: Removed LeadMagnet and result routes per instructions */}
+        <Route path="/step1-watch" element={<Step1Watch />} />
         <Route path="/book-now" element={<BookingPage />} />
+        <Route path="/assessment" element={<PreQualificationAssessment />} />
+        <Route path="/feedback" element={<ClientFeedbackForm />} />
+        
+        {/* --- ADMINISTRATOR ROUTES --- */}
+        <Route path="/admin-login" element={<AdministratorLogin />} />
+        
+        <Route 
+          path="/administrator" 
+          element={session ? <Administrator /> : <Navigate to="/admin-login" />} 
+        />
+
+        <Route 
+          path="/administrator/manage/:clientId" 
+          element={session ? <ManageClient /> : <Navigate to="/admin-login" />} 
+        />
+
+        <Route path="/dashboard" element={<Navigate to="/administrator" />} />
       </Routes>
 
-      <Footer />
+      {!hideLayout && <Footer />}
       <ScrollToTop />
     </div>
   )
